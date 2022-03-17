@@ -12,8 +12,8 @@
         v-for="(child, index) in item.children"
         :key="index"
         :item="child"
-        @addItem="$emit('addItem', $event)"
-        @makeItemCanFold="$emit('makeItemCanFold', $event)"
+        @addItem="$emit('addItem')"
+        @makeItemCanFold="$emit('makeItemCanFold')"
       />
       <span @click="$emit('addItem', item)">+</span>
     </ol>

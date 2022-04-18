@@ -1,6 +1,6 @@
 <template>
   <div class="el-input__wrapper">
-    <span v-if="textOnly">
+    <span v-if="onlyShowText">
       <slot>{{ value }}</slot>
     </span>
     <div class="el-input__text" v-if="isShowText">
@@ -106,7 +106,7 @@ export default {
       type: String,
       default: "",
     },
-    textOnly: {
+    onlyShowText: {
       type: Boolean,
       default: false,
     },
@@ -126,19 +126,19 @@ export default {
   },
   computed: {
     isShowText() {
-      return this.type === "text" && !this.textOnly;
+      return this.type === "text" && !this.onlyShowText;
     },
     isShowCheckbox() {
-      return this.type === "checkbox" && !this.textOnly;
+      return this.type === "checkbox" && !this.onlyShowText;
     },
     isShowRadio() {
-      return this.type === "radio" && !this.textOnly;
+      return this.type === "radio" && !this.onlyShowText;
     },
     isShowSelect() {
-      return this.type === "select" && !this.textOnly;
+      return this.type === "select" && !this.onlyShowText;
     },
     isShowTextarea() {
-      return this.type === "textarea" && !this.textOnly;
+      return this.type === "textarea" && !this.onlyShowText;
     },
   },
   methods: {
@@ -167,8 +167,6 @@ export default {
   .el-input__checkbox {
     display: inline-block;
     margin-right: 5px;
-  }
-  .el-input__textarea {
   }
 }
 </style>

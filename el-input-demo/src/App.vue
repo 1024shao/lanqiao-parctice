@@ -86,14 +86,6 @@ export default {
       ],
     };
   },
-  methods: {
-    handleInput(e) {
-      this.inputValue = e.target.value;
-    },
-    handleCheck(e) {
-      this.checked1 = !this.checked1;
-    },
-  },
 };
 </script>
 

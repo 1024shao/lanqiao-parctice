@@ -1,69 +1,30 @@
 <template>
   <div class="el-input__wrapper">
-    <span v-if="onlyShowText">
-      <slot>{{ value }}</slot>
-    </span>
-    <div class="el-input__text" v-if="isShowText">
-      <input
-        :name="name"
-        :type="type"
-        :value="value"
-        :style="{ width }"
-        @input="handleInput"
-      />
-    </div>
-    <div class="el-input__checkbox" v-if="isShowCheckbox">
-      <label>
-        <input
-          :name="name"
-          :type="type"
-          :checked="value"
-          :style="{ width }"
-          :class="{ 'is-disabled': disabled }"
-          :disabled="disabled"
-          @change="handleCheck"
-        />
-        <slot></slot>
-      </label>
-    </div>
-    <div class="el-input__radio" v-show="isShowRadio">
-      <label>
-        <input
-          :name="name"
-          :type="type"
-          :value="label"
-          :disabled="disabled"
-          :checked="disabled || label === value"
-          @change="handleInput"
-        />
-        <slot></slot>
-      </label>
-    </div>
-    <div class="el-input__select" v-show="isShowSelect">
-      <select
-        :disabled="disabled"
-        :name="name"
-        :placeholder="placeholder"
-        :style="{ width }"
-        :value="value"
-        @change="handleInput"
-      >
-        <option
-          :value="item[optionValue]"
-          v-for="item in options"
-          :key="item[optionValue]"
-        >
-          {{ item[optionKey] }}
+    <div v-if="type === 'select'">
+      <select :name="name" :placeholder="placeholder" v-model="inputValue">
+        <option v-for="item in options" :value="item.value" :key="item.value">
+          {{ item.label }}
         </option>
       </select>
     </div>
-    <div class="el-input__textarea" v-show="isShowTextarea">
+    <div v-else-if="type === 'textarea'">
       <textarea
         :name="name"
-        :value="value"
+        v-model="inputValue"
+        v-bind="$attrs"
         :cols="cols"
         :rows="rows"
-        @input="handleInput"
+        :placeholder="placeholder"
+      />
+    </div>
+    <div v-else>
+      <input
+        :name="name"
+        :type="type"
+        v-bind="$attrs"
+        :value="value"
+        v-model="inputValue"
+        :disabled="disabled"
         :placeholder="placeholder"
       />
     </div>
@@ -73,7 +34,20 @@
 <script>
 export default {
   name: "ElInput",
+  model: {
+    prop: "modelValue",
+    event: "changeModelValue",
+  },
+  data() {
+    return {
+      inputValue: "",
+    };
+  },
   props: {
+    modelValue: {
+      type: [String, Number, Boolean],
+      default: "",
+    },
     type: {
       type: String,
       default: "text",
@@ -86,10 +60,6 @@ export default {
       type: [String, Number, Boolean],
       default: "",
     },
-    label: {
-      type: [String, Number],
-      default: "",
-    },
     placeholder: {
       type: String,
       default: "",
@@ -97,18 +67,6 @@ export default {
     options: {
       type: Array,
       default: () => [],
-    },
-    optionKey: {
-      type: String,
-      default: "",
-    },
-    optionValue: {
-      type: String,
-      default: "",
-    },
-    onlyShowText: {
-      type: Boolean,
-      default: false,
     },
     rows: {
       type: Number,
@@ -122,31 +80,16 @@ export default {
       type: Boolean,
       default: false,
     },
-    width: String,
   },
-  computed: {
-    isShowText() {
-      return this.type === "text" && !this.onlyShowText;
-    },
-    isShowCheckbox() {
-      return this.type === "checkbox" && !this.onlyShowText;
-    },
-    isShowRadio() {
-      return this.type === "radio" && !this.onlyShowText;
-    },
-    isShowSelect() {
-      return this.type === "select" && !this.onlyShowText;
-    },
-    isShowTextarea() {
-      return this.type === "textarea" && !this.onlyShowText;
-    },
+  created() {
+    this.inputValue = this.modelValue;
   },
-  methods: {
-    handleInput(e) {
-      this.$emit("input", e.target.value);
+  watch: {
+    inputValue(val) {
+      this.$emit("changeModelValue", val);
     },
-    handleCheck(e) {
-      this.$emit("input", e.target.checked);
+    modelValue(val) {
+      this.inputValue = val;
     },
   },
 };

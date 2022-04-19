@@ -1,65 +1,82 @@
 <template>
   <div>
-    <div>来点文字：<ElInput v-model="inputValue" /></div>
-    <hr />
-    纯文本 : <ElInput onlyShowText>纯文本纯文本....</ElInput>
-    <hr />
-    text: <ElInput />同行的第二个 <ElInput width="500px" />
-    <hr />
-    复选框 :
-    <ElInput
-      type="checkbox"
-      v-for="(item, index) of checkedList"
-      :key="index"
-      :disabled="index == 3"
-      >checkbox - {{ index }}
-    </ElInput>
-    <hr />
-    单选框：
-    <ElInput type="radio" v-model="radioValue" label="1">一</ElInput>
-    <ElInput type="radio" v-model="radioValue" label="2">二</ElInput>
-    <ElInput type="radio" v-model="radioValue" label="3">三</ElInput>
-    <ElInput type="radio" v-model="radioValue" label="4" disabled>四</ElInput>
-    <hr />
-    两个文本框:
-    <ElInput width="300px" /><ElInput width="300px" />
-    <hr />
-    三个文本框
-    <ElInput width="200px" /><ElInput width="200px" /><ElInput width="200px" />
-    <hr />
-    下拉框
-    <ElInput
-      width="200px"
-      type="select"
-      v-model="selectValue"
-      placeholder="请选择"
-      :options="selectOptions"
-      option-key="label"
-      option-value="value"
-    />
-    <hr />
-    文本框：
-    <ElInput type="textarea" v-model="textareaValue" placeholder="初始化" />
+    <el-form-item label="来点文字:">
+      <ElInput v-model="inputValue" />
+    </el-form-item>
+
+    <el-form-item label="纯文本:">
+      {{ peerText }}
+    </el-form-item>
+
+    <el-form-item label="text:">
+      <ElInput />
+      <span>同行的第二个 </span><ElInput />
+    </el-form-item>
+
+    <el-form-item label="复选框:">
+      <ElInput
+        type="checkbox"
+        v-for="(item, index) of checkedList"
+        v-model="item.checked"
+        :key="index"
+        :disabled="index == 3"
+        >checkbox - {{ index }}
+      </ElInput>
+    </el-form-item>
+
+    <el-form-item label="单选框">
+      <ElInput type="radio" v-model="radioValue" value="1">一</ElInput>
+      <ElInput type="radio" v-model="radioValue" value="2">二</ElInput>
+      <ElInput type="radio" v-model="radioValue" value="3">三</ElInput>
+      <ElInput type="radio" v-model="radioValue" value="4" disabled>四</ElInput>
+    </el-form-item>
+
+    <el-form-item label="两个文本框:">
+      <ElInput :style="{ width: '200px' }" />
+      <ElInput :style="{ width: '300px' }" />
+    </el-form-item>
+
+    <el-form-item label="三个文本框:">
+      <ElInput :style="{ width: '200px' }" />
+      <ElInput :style="{ width: '200px' }" />
+      <ElInput :style="{ width: '200px' }" />
+    </el-form-item>
+
+    <el-form-item label="下拉框">
+      <ElInput
+        type="select"
+        v-model="selectValue"
+        placeholder="请选择"
+        :options="selectOptions"
+      />
+    </el-form-item>
+
+    <el-form-item label="文本框:">
+      <ElInput type="textarea" v-model="textareaValue" placeholder="初始化" />
+    </el-form-item>
   </div>
 </template>
 
 <script>
 import ElInput from "./components/ElInput.vue";
+import ElFormItem from "./components/ElFormItem.vue";
 export default {
   name: "App",
   components: {
     ElInput,
+    ElFormItem,
   },
   data() {
     return {
       inputValue: "",
+      peerText: "纯文本、纯文本、纯文本、。。。。。。",
       checkedList: [
         { id: 1, checked: false },
         { id: 2, checked: false },
         { id: 3, checked: false },
         { id: 4, checked: false },
       ],
-      radioValue: "1",
+      radioValue: "",
       textareaValue: "",
       selectValue: "",
       selectOptions: [
@@ -88,14 +105,3 @@ export default {
   },
 };
 </script>
-
-<style lang="less">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>

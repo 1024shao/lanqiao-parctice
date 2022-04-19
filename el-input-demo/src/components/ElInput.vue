@@ -1,7 +1,12 @@
 <template>
   <div class="el-input__wrapper">
     <div v-if="type === 'select'">
-      <select :name="name" :placeholder="placeholder" v-model="inputValue">
+      <select
+        :name="name"
+        :placeholder="placeholder"
+        v-model="inputValue"
+        v-on="$listeners"
+      >
         <option v-for="item in options" :value="item.value" :key="item.value">
           {{ item.label }}
         </option>
@@ -15,6 +20,7 @@
         :cols="cols"
         :rows="rows"
         :placeholder="placeholder"
+        v-on="$listeners"
       />
     </div>
     <div v-else>
@@ -26,6 +32,7 @@
         v-model="inputValue"
         :disabled="disabled"
         :placeholder="placeholder"
+        v-on="$listeners"
       />
     </div>
   </div>
@@ -34,6 +41,7 @@
 <script>
 export default {
   name: "ElInput",
+  inheritAttrs: false,
   model: {
     prop: "modelValue",
     event: "changeModelValue",

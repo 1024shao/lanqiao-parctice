@@ -1,18 +1,20 @@
 <template>
-  <div id="app">
-    <UseDynamicForm />
-  </div>
+	<div id="app">
+		<UseDynamicForm />
+	</div>
 </template>
 
 <script>
-import UseDynamicForm from "./components/UseDynamicForm";
+import UseDynamicForm from './components/DynamicForm.vue'
 export default {
-  name: "App",
-  components: {
-    UseDynamicForm,
-  },
-};
+	name: 'App',
+	components: {
+		UseDynamicForm,
+	},
+	methods: {
+		edit(value, index) {
+			console.log('value, index: ', value, index)
+		},
+	},
+}
 </script>
-
-<style lang="less">
-</style>

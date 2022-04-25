@@ -1,60 +1,64 @@
 <template>
   <div class="dynamic-form">
     <div class="dynamic-form-content">
-      <FormItem title="标题" required>
-        <ElInput v-model="formData.title" />
-      </FormItem>
+      <el-form ref="ruleForm" :model="formData" :rules="rules">
+        <form-item title="标题" prop="title">
+          <el-input v-model="formData.title" />
+        </form-item>
 
-      <FormItem title="类型" required>
-        <label>
-          <ElInput
-            type="radio"
-            value="横轴"
-            v-model="formData.axial"
-            name="axial"
-          />横轴
-        </label>
-        <label>
-          <ElInput
-            type="radio"
-            value="纵轴"
-            v-model="formData.axial"
-            name="axial"
-          />纵轴
-        </label>
-      </FormItem>
+        <form-item title="类型" prop="axis">
+          <label>
+            <el-input
+              type="radio"
+              value="横轴"
+              v-model="formData.axis"
+              name="axis"
+            />横轴
+          </label>
+          <label>
+            <el-input
+              type="radio"
+              value="纵轴"
+              v-model="formData.axis"
+              name="axis"
+            />纵轴
+          </label>
+        </form-item>
 
-      <FormItem title="时间节点">
-        <div class="time-node-list">
-          <div
-            class="time-node"
-            v-for="(node, index) in formData.timeNodes"
-            :key="index"
-          >
-            <div class="left">
-              <FormItem required title="时间">
-                <el-input v-model="node.time" />
-              </FormItem>
-              <FormItem required title="内容">
-                <el-input v-model="node.content" />
-              </FormItem>
-              <FormItem title="链接">
-                <el-input v-model="node.url" />
-              </FormItem>
-            </div>
-            <div class="right">
-              <span class="delete" @click="deleteNodeByIndex(index)">删除</span>
-              <span class="move-down" @click="moveNodeDown(index)">下移</span>
+        <form-item title="时间节点">
+          <div class="time-node-list">
+            <div
+              class="time-node"
+              v-for="(node, index) in formData.timeNodes"
+              :key="index"
+            >
+              <div class="left">
+                <form-item title="时间" :prop="'timeNodes[' + index + '].time'">
+                  <el-input v-model="node.time" />
+                </form-item>
+                <form-item title="内容">
+                  <el-input v-model="node.content" />
+                </form-item>
+                <form-item title="链接">
+                  <el-input v-model="node.url" />
+                </form-item>
+              </div>
+              <div class="right">
+                <span class="delete" @click="deleteNodeByIndex(index)"
+                  >删除</span
+                >
+                <span class="move-down" @click="moveDownNode(index)">下移</span>
+              </div>
             </div>
           </div>
-        </div>
-      </FormItem>
+        </form-item>
+      </el-form>
     </div>
 
     <div class="add-node" @click="addNode">+添加节点</div>
     <div class="dynamic-form-footer">
       <div class="create" @click="showFormData">立即创建</div>
-      <div class="remake" @click="remakeFormData">重制</div>
+      <div class="remake" @click="resetFormData">重制</div>
     </div>
   </div>
 </template>
@@ -62,18 +66,25 @@
 <script>
 import FormItem from "./FormItem.vue";
 import ElInput from "./ElInput.vue";
+import ElForm from "./ElForm.vue";
 export default {
   name: "UseDynamicForm",
   components: {
     FormItem,
     ElInput,
+    ElForm,
   },
   data() {
     return {
       formData: {
         title: "",
-        axial: "",
+        axis: "",
         timeNodes: [{ time: "", content: "", url: "" }],
+      },
+      rules: {
+        title: { required: true, message: "标题不能为空" },
+        axis: { required: true, message: "类型必选" },
+        timeNodes: [{ time: { required: true, message: "时间必须" } }],
       },
     };
   },
@@ -84,7 +95,7 @@ export default {
     deleteNodeByIndex(index) {
       this.formData.timeNodes.splice(index, 1);
     },
-    moveNodeDown(index) {
+    moveDownNode(index) {
       if (index === this.formData.timeNodes.length - 1) {
         return;
       }
@@ -93,11 +104,13 @@ export default {
       this.formData.timeNodes.splice(index + 1, 0, tempNode);
     },
     showFormData() {
+      this.$refs.ruleForm.validateFields();
       console.log(this.formData);
     },
-    remakeFormData() {
+    resetFormData() {
+      this.$refs.ruleForm.resetFields();
       this.formData.title = "";
-      this.formData.axial = "";
+      this.formData.axis = "";
       this.formData.timeNodes = this.formData.timeNodes.map(() => ({
         title: "",
         content: "",

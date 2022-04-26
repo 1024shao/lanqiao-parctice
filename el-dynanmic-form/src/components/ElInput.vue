@@ -1,10 +1,11 @@
 <template>
 	<div class="el-input__wrapper">
 		<input
+			class="el-input"
 			:name="name"
 			:type="type"
-			v-bind="$attrs"
 			:value="value"
+			v-bind="$attrs"
 			v-model="inputValue"
 			v-on="$listeners"
 		/>
@@ -59,18 +60,11 @@ export default {
 <style lang="less" scoped>
 .el-input__wrapper {
 	display: inline-block;
-	.el-input__text {
-		display: inline-block;
-		input {
-			border: 1px solid #ddd;
-			margin-right: 10px;
-			border-radius: 5px;
-			height: 20px;
-		}
-	}
-	.el-input__checkbox {
-		display: inline-block;
-		margin-right: 5px;
+	.el-input {
+		border: 1px solid #ddd;
+		margin-right: 10px;
+		border-radius: 5px;
+		height: 20px;
 	}
 }
 </style>

@@ -22,7 +22,6 @@ export default {
 	},
 	methods: {
 		validateFields() {
-			console.log('-')
 			this.fields.forEach((item) => {
 				item.validate()
 			})
@@ -35,5 +34,3 @@ export default {
 	},
 }
 </script>
-
-<style></style>
